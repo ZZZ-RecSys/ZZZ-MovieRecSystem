@@ -3,8 +3,6 @@ require('@tensorflow/tfjs-node');
 require('dotenv').config();
 const use = require('@tensorflow-models/universal-sentence-encoder');
 const moviePlots = require("./data/movie-plots.json");
-const pg = require('pg');
-
 
 const config = {
     user: process.env.PG_NAME,
