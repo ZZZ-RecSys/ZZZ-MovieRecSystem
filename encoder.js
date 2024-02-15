@@ -42,7 +42,7 @@ const storeInPG = async (moviePlots) => {
     await db.none(query);
  }
 
- use.load().then(async model => {
+use.load().then(async model => {
    const batchSize = 1000;
    for (let start = 0; start < moviePlots.length; start += batchSize) {
       const end = Math.min(start + batchSize, moviePlots.length);
