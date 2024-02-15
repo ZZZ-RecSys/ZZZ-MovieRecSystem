@@ -10,6 +10,11 @@ The dataset, structured in JSON format, contains detailed plot descriptions and 
 
 This initiative is part of a larger project to develop a robust movie recommendation engine. The system is designed to suggest films to users based on plot similarities and other relevant factors. By populating the PostgreSQL database with Kaggle's dataset, we enable the use of advanced vector search techniques powered by TensorFlow, PGVector, and Next.js.
 
+## Contributors
+- Yiwei Zhang
+- Shizhe Zhang
+- Weiran Zhao
+
 ## Additional Resources
 
 - **DevPost**: For a detailed narrative on the project's evolution and insights, visit the [DevPost project page](https://devpost.com/software/zzz-movie-recommender?ref_content=user-portfolio&ref_feature=in_progress).
