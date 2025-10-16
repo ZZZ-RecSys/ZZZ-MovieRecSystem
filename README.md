@@ -26,7 +26,7 @@ immediately browse results, or you can type your own prompt / movie title and fe
 
 ## Live demo
 
-Explore the deployed experience at **[zzzrecmoview.vercel.app](https://zzz-movie-rec-system.vercel.app/)**. The hosted instance matches this repository, so you can browse the carousel, submit your own prompts, and share the link without any local setup.
+Explore the deployed experience at **[zzz-movie-rec-system.vercel.app](https://zzz-movie-rec-system.vercel.app/)**. The hosted instance matches this repository, so you can browse the carousel, submit your own prompts, and share the link without any local setup.
 
 ### Available scripts
 
