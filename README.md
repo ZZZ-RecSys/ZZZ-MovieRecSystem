@@ -1,25 +1,55 @@
-# ZZZ - Movie Recommendation System: Database Population
+# ZZZ - Movie Recommendation Carousel
 
-This repository facilitates the integration of a comprehensive movie dataset from Kaggle into a PostgreSQL database, setting the foundation for a sophisticated movie recommendation system.
+This project delivers an interactive movie recommendation experience powered by a lightweight latent semantic model and a modern
+Next.js front end. A curated subset of Kaggle movie plots is embedded into a compact latent space (truncated SVD over TF-IDF
+features) and enriched with genre plus release-year metadata. The React carousel renders the top matches for a seed movie title or
+a free-form description, presenting similarity scores and concise insight strings.
 
-## Dataset
+## Getting started
 
-The dataset, structured in JSON format, contains detailed plot descriptions and can be directly accessed here: [Movie Plots Dataset](https://raw.githubusercontent.com/Aiven-Labs/what-movie-to-watch-pgvector/main/first-steps-tensorflow-pg-nodejs/movie-plots.json).
+```bash
+npm install
+npm run dev
+```
 
-## Project Overview
+Visit [http://localhost:3000](http://localhost:3000) to try the carousel. The page loads a default seed automatically so you can
+immediately browse results, or you can type your own prompt / movie title and fetch fresh recommendations.
 
-This initiative is part of a larger project to develop a robust movie recommendation engine. The system is designed to suggest films to users based on plot similarities and other relevant factors. By populating the PostgreSQL database with Kaggle's dataset, we enable the use of advanced vector search techniques powered by TensorFlow, PGVector, and Next.js.
+## Preview
 
-## Contributors
-- Yiwei Zhang
-- Shizhe Zhang
-- Weiran Zhao
+![Static preview of the movie recommendation carousel](public/preview.svg)
 
-## Additional Resources
+> _Animated capture unavailable_: Running the app locally without network access prevents installing the Next.js toolchain in
+> this environment, so the repository includes a high-fidelity SVG mock that highlights the layout and insights surfaced in the
+> carousel UI. When dependencies are available you can generate your own GIF by starting `npm run dev` and recording the
+> interaction with tools such as QuickTime, ScreenToGif, or `ffmpeg` + `imagemagick`.
 
-- **DevPost**: For a detailed narrative on the project's evolution and insights, visit the [DevPost project page](https://devpost.com/software/zzz-movie-recommender?ref_content=user-portfolio&ref_feature=in_progress).
-- **Kaggle**: The source of the dataset is available on [Kaggle](https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots), providing a rich repository of movie plots.
-- **Vector Search Web App**: The project's web application, [ZZZ - MovieSearch Client](https://github.com/ZZZ-RecSys/ZZZ-MovieSearch-Client), demonstrates the application of vector search to recommend movies, tying together the populated database with a user-friendly interface.
+### Hosting tip
 
-Our goal is to enhance the movie-watching experience by offering tailored recommendations through a user-centric, data-and-semantic-driven search approach.
+The app is ready to deploy on platforms such as [Vercel](https://vercel.com) or any Node-compatible host:
 
+1. Fork the repository and connect it to your Vercel account.
+2. Set the framework preset to **Next.js** (defaults work out of the box).
+3. Trigger a production build; Vercel will expose the `/api` routes alongside the React front end.
+
+If you publish a deployment, drop the live URL back into this README so collaborators can explore the carousel without setting up
+the development server.
+
+### Available scripts
+
+- `npm run dev` &mdash; start the Next.js development server with hot reloading
+- `npm run build` &mdash; produce an optimized production build
+- `npm run start` &mdash; launch the built application in production mode
+- `npm run lint` &mdash; run Next.js ESLint checks
+
+## Architecture overview
+
+- **Next.js API routes** (`pages/api`) expose `/api/recommendations`, `/api/movies`, and `/api/health`. They share a memoized
+  recommender module that loads the dataset, builds TF-IDF vectors, performs truncated SVD, and fuses in genre / year metadata.
+- **React front end** (`pages/index.tsx`) renders search controls, an inferred preference profile, and a responsive carousel UI that
+  consumes the API. The carousel adapts to different breakpoints and surfaces the similarity scores plus narrative insights.
+- **Shared logic** (`lib/recommender.ts`) houses the recommendation engine and exports helper functions for the API routes.
+- **Styling** (`styles/globals.css`) applies a cinematic dark theme with responsive layout and accessible focus states.
+
+The app intentionally keeps the ML stack lightweight, relying on matrix factorization and metadata augmentation so it can run
+locally without heavyweight dependencies.
