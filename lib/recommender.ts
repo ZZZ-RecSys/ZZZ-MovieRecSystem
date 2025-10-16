@@ -56,6 +56,88 @@ interface RecommenderState {
 
 const METADATA_WEIGHT = 0.35;
 
+const gradientPalette: Array<[string, string]> = [
+  ['#1e293b', '#0f172a'],
+  ['#1f2937', '#be123c'],
+  ['#0f766e', '#134e4a'],
+  ['#7c3aed', '#1f2937'],
+  ['#2563eb', '#1e3a8a'],
+  ['#ca8a04', '#92400e'],
+  ['#4c1d95', '#0f172a'],
+];
+
+const posterCache = new Map<string, string>();
+
+const escapeForSvg = (value: string): string =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
+const createPosterPlaceholder = (title: string): string => {
+  const baseTitle = title.trim() || 'Movie';
+  const cached = posterCache.get(baseTitle);
+  if (cached) {
+    return cached;
+  }
+
+  const hash = Array.from(baseTitle).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const [start, end] = gradientPalette[hash % gradientPalette.length];
+
+  const words = baseTitle.split(/\s+/).filter(Boolean);
+  const lines: string[] = [];
+  let currentLine = '';
+
+  words.forEach((word) => {
+    const candidate = currentLine ? `${currentLine} ${word}` : word;
+    if (candidate.length <= 14) {
+      currentLine = candidate;
+    } else {
+      if (currentLine) {
+        lines.push(currentLine);
+      }
+      currentLine = word;
+    }
+  });
+
+  if (currentLine) {
+    lines.push(currentLine);
+  }
+
+  let limitedLines = lines.length ? lines.slice(0, 3) : [baseTitle.slice(0, 14)];
+  if (lines.length > 3) {
+    const remainder = lines.slice(2).join(' ');
+    const trimmed = remainder.length > 14 ? `${remainder.slice(0, 13)}…` : remainder;
+    limitedLines = [lines[0], lines[1], trimmed];
+  }
+
+  const longestLine = limitedLines.reduce((max, line) => Math.max(max, line.length), 0);
+  const fontSize = longestLine > 13 ? 38 : 44;
+
+  const textNodes = limitedLines
+    .map((line, index) => {
+      const dy = index === 0 ? '0' : '1.2em';
+      return `<tspan x="50%" dy="${dy}">${escapeForSvg(line)}</tspan>`;
+    })
+    .join('');
+
+  const label = escapeForSvg(`${baseTitle} poster`);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" role="img" aria-labelledby="title"><title>${label}</title><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="${start}"/><stop offset="100%" stop-color="${end}"/></linearGradient></defs><rect width="400" height="600" fill="url(#g)"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="rgba(248,250,252,0.92)" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="${fontSize}" font-weight="600" letter-spacing="0.5">${textNodes}</text></svg>`;
+
+  const dataUri = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+  posterCache.set(baseTitle, dataUri);
+  return dataUri;
+};
+
+const resolvePoster = (movie: RawMovie): string => {
+  if (movie.poster && (movie.poster.startsWith('/') || movie.poster.startsWith('data:'))) {
+    return movie.poster;
+  }
+  return createPosterPlaceholder(movie.title);
+};
+
 const tokenize = (text: string): string[] =>
   (text || '')
     .toLowerCase()
@@ -501,7 +583,7 @@ const formatMovie = (movie: MovieRecord, score: number, insights: string): Recom
   plot: movie.plot,
   genre: movie.genre,
   year: movie.year,
-  poster: movie.poster,
+  poster: resolvePoster(movie),
   score: Number.isFinite(score) ? Number(score.toFixed(4)) : 0,
   insights,
 });

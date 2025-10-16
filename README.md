@@ -24,16 +24,9 @@ immediately browse results, or you can type your own prompt / movie title and fe
 > carousel UI. When dependencies are available you can generate your own GIF by starting `npm run dev` and recording the
 > interaction with tools such as QuickTime, ScreenToGif, or `ffmpeg` + `imagemagick`.
 
-### Hosting tip
+## Live demo
 
-The app is ready to deploy on platforms such as [Vercel](https://vercel.com) or any Node-compatible host:
-
-1. Fork the repository and connect it to your Vercel account.
-2. Set the framework preset to **Next.js** (defaults work out of the box).
-3. Trigger a production build; Vercel will expose the `/api` routes alongside the React front end.
-
-If you publish a deployment, drop the live URL back into this README so collaborators can explore the carousel without setting up
-the development server.
+Explore the deployed experience at **[zzzrecmoview.vercel.app](https://zzzrecmoview.vercel.app/)**. The hosted instance matches this repository, so you can browse the carousel, submit your own prompts, and share the link without any local setup.
 
 ### Available scripts
 
