@@ -18,7 +18,7 @@ immediately browse results, or you can type your own prompt / movie title and fe
 ## Preview
 
 
-<img width="2272" height="2982" alt="image" src="https://github.com/user-attachments/assets/0c1f1d42-12b9-41da-86a8-4f9d9a7a9836" />
+<img width="2272" height="2982" alt="image" src="https://zzz-movie-rec-system.vercel.app/" />
 
 
 ## Live demo
