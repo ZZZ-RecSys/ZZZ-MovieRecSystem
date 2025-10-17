@@ -17,12 +17,9 @@ immediately browse results, or you can type your own prompt / movie title and fe
 
 ## Preview
 
-![Static preview of the movie recommendation carousel](public/preview.svg)
 
-> *Animated capture unavailable*: Running the app locally without network access prevents installing the Next.js toolchain in
-> this environment, so the repository includes a high-fidelity SVG mock that highlights the layout and insights surfaced in the
-> carousel UI. When dependencies are available you can generate your own GIF by starting `npm run dev` and recording the
-> interaction with tools such as QuickTime, ScreenToGif, or `ffmpeg` + `imagemagick`.
+<img width="2272" height="2982" alt="image" src="https://github.com/user-attachments/assets/0c1f1d42-12b9-41da-86a8-4f9d9a7a9836" />
+
 
 ## Live demo
 
