@@ -16,9 +16,8 @@ Visit [http://localhost:3000](http://localhost:3000) to try the carousel. The pa
 immediately browse results, or you can type your own prompt / movie title and fetch fresh recommendations.
 
 ## Preview
-
-
-<img width="2272" height="2982" alt="image" src="https://zzz-movie-rec-system.vercel.app/" />
+https://zzz-movie-rec-system.vercel.app/
+<img width="2272" height="1500" alt="image" src="https://github.com/user-attachments/assets/63d6a6b6-ca4b-444f-a8c5-fbf9b2810ac7" />
 
 
 ## Live demo
