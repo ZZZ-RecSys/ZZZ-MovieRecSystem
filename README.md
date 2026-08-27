@@ -9,7 +9,7 @@ a free-form description, presenting similarity scores and concise insight string
 
 This repo has gone through two implementation phases.
 
-**Phase 1 (Feb 2024) — PostgreSQL + pgvector + TensorFlow embeddings.** Originally built for Global Hack Week: AI/ML with [Weiran Zhao](https://github.com/weiranzhao97) (engineering) and [Shizhe Zhang](https://github.com/zhang-shizhe) (ideation). `encoder.js` used TensorFlow.js's Universal Sentence Encoder to embed every movie plot and wrote the vectors into a Postgres `movie_plots` table (`Populate data into pgdb`); the companion frontend, [`ZZZ-MovieSearch-Client`](https://github.com/zywkloo/ZZZ-MovieSearch-Client), queried it with pgvector's `<->` distance operator directly in SQL (`ORDER BY embedding <-> ...`). Write-up: [DevPost](https://devpost.com/software/zzz-movie-recommender).
+**Phase 1 (Feb 2024) — PostgreSQL + pgvector + TensorFlow embeddings.** Originally built for Global Hack Week: AI/ML by Yiwei Zhang (engineering), with initial stack research & documentation by [Weiran Zhao](https://github.com/weiranzhao97), and concept ideation from [Shizhe Zhang](https://github.com/zhang-shizhe). `encoder.js` used TensorFlow.js's Universal Sentence Encoder to embed every movie plot and wrote the vectors into a Postgres `movie_plots` table (`Populate data into pgdb`); the companion frontend, [`ZZZ-MovieSearch-Client`](https://github.com/zywkloo/ZZZ-MovieSearch-Client), queried it with pgvector's `<->` distance operator directly in SQL (`ORDER BY embedding <-> ...`). Write-up: [DevPost](https://devpost.com/software/zzz-movie-recommender).
 
 **Phase 2 (Oct 2025, this repo's current `main`) — zero-dependency TF-IDF/SVD.** Rewritten to drop the hosted-Postgres dependency for deployment simplicity: the whole ML pipeline (TF-IDF → truncated SVD → cosine similarity) now runs in-process inside the Next.js API routes, so the entire app is one Vercel deployment with no database to provision or maintain.
 
@@ -26,8 +26,8 @@ Visit [http://localhost:3000](http://localhost:3000) to try the carousel. The pa
 immediately browse results, or you can type your own prompt / movie title and fetch fresh recommendations.
 
 ## Preview
-https://zzz-movie-rec-system.vercel.app/
-<img width="2272" height="1500" alt="image" src="https://github.com/user-attachments/assets/63d6a6b6-ca4b-444f-a8c5-fbf9b2810ac7" />
+
+![Movie Carousel Recommender Preview](public/preview.png)
 
 
 ## Live demo
