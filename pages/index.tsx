@@ -138,42 +138,75 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>Movie Carousel Recommender</title>
+        <title>Movie Carousel Recommender — Zero-DB Latent Semantic Engine</title>
         <meta
           name="description"
-          content="Explore a carousel of personalized movie recommendations powered by a lightweight latent semantic model."
+          content="Explore a carousel of personalized movie recommendations powered by an in-process latent semantic model with zero external database dependencies."
         />
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>" />
       </Head>
+
+      <div className="ambient-glow-1" aria-hidden="true" />
+      <div className="ambient-glow-2" aria-hidden="true" />
+
       <header className="page-header">
+        <div className="product-badge">
+          <span className="sparkle">✨</span>
+          <span>In-Process Latent Semantic Recommender · Zero External DB</span>
+        </div>
         <h1>Movie Carousel Recommender</h1>
         <p className="tagline">
-          Describe what you want to watch or pick a title you already love. Our lightweight embedding model blends plot
-          semantics with genre and release-year cues to surface compelling matches.
+          Describe what you want to watch or pick a title you love. Our in-process SVD &amp; TF-IDF model blends plot
+          semantics with genre and release-year cues to surface compelling matches in milliseconds.
         </p>
       </header>
+
       <main>
         <section className="controls">
           <form className="search-form" onSubmit={handleSubmit}>
             <label className="form-label" htmlFor="seed-input">
-              Enter a seed movie or describe your mood
+              Enter a movie title or describe your vibe
             </label>
             <div className="form-row">
-              <input
-                id="seed-input"
-                type="text"
-                value={seed}
-                onChange={(event) => setSeed(event.target.value)}
-                placeholder="e.g. cerebral sci-fi thriller set in space"
-                list="movie-seeds"
-                aria-describedby="seed-help"
-              />
+              <div className="input-wrapper">
+                <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  id="seed-input"
+                  type="text"
+                  value={seed}
+                  onChange={(event) => setSeed(event.target.value)}
+                  placeholder="e.g. cerebral sci-fi thriller set in space"
+                  list="movie-seeds"
+                  aria-describedby="seed-help"
+                />
+                {seed && (
+                  <button
+                    type="button"
+                    className="clear-button"
+                    onClick={() => {
+                      setSeed('');
+                      setRecommendations([]);
+                      setReferenceTitle(null);
+                      setProfile({ genres: [], year: null });
+                    }}
+                    aria-label="Clear search input"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
               <button className="primary-button" type="submit" disabled={loading}>
+                {loading && <span className="spinner" />}
                 {loading ? 'Finding matches…' : 'Recommend movies'}
               </button>
             </div>
-            <p id="seed-help" className="form-help">
-              {referenceTitle ? `Anchored to ${referenceTitle}. ` : ''}
-              Suggestions:
+            <div id="seed-help" className="form-help">
+              <span className="form-help-label">
+                {referenceTitle ? `Anchored to "${referenceTitle}". ` : 'Try these seeds:'}
+              </span>
               {quickSelectMovies.map((movie) => (
                 <button
                   key={movie.title}
@@ -184,16 +217,50 @@ export default function HomePage() {
                   {movie.title}
                 </button>
               ))}
-            </p>
+            </div>
           </form>
         </section>
 
-        {error && <div className="error-banner">{error}</div>}
+        {error && (
+          <div className="error-banner">
+            <span>⚠️</span>
+            <span>{error}</span>
+          </div>
+        )}
 
         <section className="profile-panel">
-          <h2>Your preference profile</h2>
-          <p>{genreSummary}</p>
-          <p>{yearSummary}</p>
+          <div className="profile-header">
+            <h2>Semantic Preference Profile</h2>
+            <div className="pulse-badge">
+              <span className="pulse-dot" />
+              <span>LIVE HUD</span>
+            </div>
+          </div>
+          <div className="profile-content">
+            <div className="profile-row">
+              <span className="profile-meta-label">Focus Genres:</span>
+              {profile.genres?.length ? (
+                profile.genres.map((g) => (
+                  <span key={g} className="genre-tag">
+                    #{g}
+                  </span>
+                ))
+              ) : (
+                <span style={{ color: '#64748b', fontSize: '0.85rem' }}>Awaiting seed query...</span>
+              )}
+            </div>
+            <div className="profile-row">
+              <span className="profile-meta-label">Temporal Context:</span>
+              {profile.year ? (
+                <span className="year-badge">
+                  <span>📅</span>
+                  <span>{profile.year}</span>
+                </span>
+              ) : (
+                <span style={{ color: '#64748b', fontSize: '0.85rem' }}>No specific release era constraint</span>
+              )}
+            </div>
+          </div>
         </section>
 
         <section className="recommendations">
@@ -201,13 +268,48 @@ export default function HomePage() {
             <h2>Recommended for you</h2>
             <p className="section-subheading">
               {recommendations.length
-                ? 'Use the carousel controls to explore the top semantic matches.'
+                ? 'Semantic similarity ranked in latent space. Browse matches below.'
                 : 'Submit a search to see tailored suggestions.'}
             </p>
           </div>
-          <RecommendationCarousel recommendations={recommendations} />
+          <RecommendationCarousel recommendations={recommendations} loading={loading} />
         </section>
       </main>
+
+      <footer className="site-footer">
+        <div className="footer-links">
+          <a
+            href="https://github.com/ZZZ-RecSys/ZZZ-MovieRecSystem"
+            target="_blank"
+            rel="noreferrer"
+            className="footer-link"
+          >
+            GitHub Repository
+          </a>
+          <span>·</span>
+          <a
+            href="https://devpost.com/software/zzz-movie-recommender"
+            target="_blank"
+            rel="noreferrer"
+            className="footer-link"
+          >
+            DevPost Write-up
+          </a>
+          <span>·</span>
+          <a
+            href="https://github.com/ZZZ-RecSys/ZZZ-MovieSearch-Client"
+            target="_blank"
+            rel="noreferrer"
+            className="footer-link"
+          >
+            Phase 2 Client
+          </a>
+        </div>
+        <p style={{ margin: 0 }}>
+          Originally created for Global Hack Week: AI/ML. Refactored into a zero-database standalone Next.js deployment.
+        </p>
+      </footer>
+
       <datalist id="movie-seeds">
         {movies.map((movie) => (
           <option key={movie.title} value={movie.title} />
