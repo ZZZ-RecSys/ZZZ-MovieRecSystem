@@ -135,3 +135,6 @@ dist
 #env
 .env
 ca.pem
+
+# Large raw datasets
+data/movie-plots.json
