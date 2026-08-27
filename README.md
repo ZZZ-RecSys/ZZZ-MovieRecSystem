@@ -5,6 +5,16 @@ Next.js front-end. A curated subset of Kaggle movie plots is embedded into a com
 features) and enriched with genre plus release-year metadata. The React carousel renders the top matches for a seed movie title or
 a free-form description, presenting similarity scores and concise insight strings.
 
+## Project History & Repository Map
+
+This repo has gone through two implementation phases.
+
+**Phase 1 (Feb 2024) — PostgreSQL + pgvector + TensorFlow embeddings.** Originally built for Global Hack Week: AI/ML with [Weiran Zhao](https://github.com/weiranzhao97) and [Shizhe Zhang](https://github.com/zhang-shizhe). `encoder.js` used TensorFlow.js's Universal Sentence Encoder to embed every movie plot and wrote the vectors into a Postgres `movie_plots` table (`Populate data into pgdb`); the companion frontend, [`ZZZ-MovieSearch-Client`](https://github.com/zywkloo/ZZZ-MovieSearch-Client), queried it with pgvector's `<->` distance operator directly in SQL (`ORDER BY embedding <-> ...`). Write-up: [DevPost](https://devpost.com/software/zzz-movie-recommender).
+
+**Phase 2 (Oct 2025, this repo's current `main`) — zero-dependency TF-IDF/SVD.** Rewritten to drop the hosted-Postgres dependency for deployment simplicity: the whole ML pipeline (TF-IDF → truncated SVD → cosine similarity) now runs in-process inside the Next.js API routes, so the entire app is one Vercel deployment with no database to provision or maintain.
+
+The Planned Improvements table below (Sentence-Transformer embeddings, FAISS/HNSW indexing) is effectively re-introducing an embeddings + vector-index layer — informed by what Phase 1 already proved out.
+
 ## Getting started
 
 ```bash
