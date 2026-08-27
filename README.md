@@ -1,4 +1,4 @@
-# ZZZ - Movie Recommendation Carousel
+# MovieBTI - Semantic Retrieval & Movie Discovery 
 
 > [!NOTE]
 > ### 📢 Project Status Notice / 项目状态声明
