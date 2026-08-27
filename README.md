@@ -5,15 +5,40 @@ Next.js front-end. A curated subset of Kaggle movie plots is embedded into a com
 features) and enriched with genre plus release-year metadata. The React carousel renders the top matches for a seed movie title or
 a free-form description, presenting similarity scores and concise insight strings.
 
-## Project History & Repository Map
+## Project Evolution (3 Phases)
 
-This repo has gone through two implementation phases.
+```mermaid
+flowchart LR
+    subgraph P0 ["Phase 0: Early Research (Feb 2024)"]
+        direction TB
+        O1["Oracle Cloud & DB Stack"]
+        O2["❌ High coupling & heavy friction"]
+        O1 --> O2
+    end
 
-**Phase 1 (Feb 2024) — PostgreSQL + pgvector + TensorFlow embeddings.** Originally built for Global Hack Week: AI/ML by Yiwei Zhang (engineering), with initial stack research & documentation by [Weiran Zhao](https://github.com/weiranzhao97), and concept ideation from [Shizhe Zhang](https://github.com/zhang-shizhe). `encoder.js` used TensorFlow.js's Universal Sentence Encoder to embed every movie plot and wrote the vectors into a Postgres `movie_plots` table (`Populate data into pgdb`); the companion frontend, [`ZZZ-MovieSearch-Client`](https://github.com/zywkloo/ZZZ-MovieSearch-Client), queried it with pgvector's `<->` distance operator directly in SQL (`ORDER BY embedding <-> ...`). Write-up: [DevPost](https://devpost.com/software/zzz-movie-recommender).
+    subgraph P1 ["Phase 1: Hackathon MVP (Feb 2024)"]
+        direction TB
+        TF["TensorFlow.js USE<br/>encoder.js"] --> PG[("PostgreSQL + pgvector<br/>(Aiven Hosted)")]
+        C1["Next.js Client<br/>pgvector L2 distance"] <--> PG
+    end
 
-**Phase 2 (Oct 2025, this repo's current `main`) — zero-dependency TF-IDF/SVD.** Rewritten to drop the hosted-Postgres dependency for deployment simplicity: the whole ML pipeline (TF-IDF → truncated SVD → cosine similarity) now runs in-process inside the Next.js API routes, so the entire app is one Vercel deployment with no database to provision or maintain.
+    subgraph P2 ["Phase 2: Current main (Oct 2025)"]
+        direction TB
+        V1["Single Vercel Deployment<br/>(Next.js App)"]
+        V2["In-Process ML Pipeline<br/>TF-IDF → Truncated SVD → Cosine Sim"]
+        V1 --- V2
+        V3["✅ Zero Database & Zero Dependency"]
+    end
 
-The Planned Improvements table below (Sentence-Transformer embeddings, FAISS/HNSW indexing) is effectively re-introducing an embeddings + vector-index layer — informed by what Phase 1 already proved out.
+    P0 -->|Pivot to open stack| P1
+    P1 -->|In-process rewrite| P2
+```
+
+| Phase | Stack & Architecture | Tradeoffs & Outcome | Roles |
+|---|---|---|---|
+| **Phase 0** (Feb 2024) | Oracle Cloud Ecosystem | Explored but dropped due to tight coupling & high deployment overhead | Yiwei Zhang (Lead), [Weiran Zhao](https://github.com/weiranzhao97) (Research) |
+| **Phase 1** (Feb 2024) | PostgreSQL + pgvector + TensorFlow USE | Working MVP for Global Hack Week; write-up on [DevPost](https://devpost.com/software/zzz-movie-recommender); companion client: [`ZZZ-MovieSearch-Client`](https://github.com/ZZZ-RecSys/ZZZ-MovieSearch-Client) | Yiwei Zhang (Engineering), [Weiran Zhao](https://github.com/weiranzhao97) (Docs & Research), [Shizhe Zhang](https://github.com/zhang-shizhe) (Ideation) |
+| **Phase 2** (Oct 2025) | Next.js + In-Process TF-IDF / SVD | Dropped hosted Postgres; entire ML pipeline runs in-process on Vercel with zero database | Yiwei Zhang (Solo rewrite & optimization) |
 
 ## Getting started
 
