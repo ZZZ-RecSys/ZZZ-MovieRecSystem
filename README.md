@@ -1,5 +1,18 @@
 # ZZZ - Movie Recommendation Carousel
 
+> [!NOTE]
+> ### 📢 Project Status Notice / 项目状态声明
+>
+> **English:**
+> - **Open Source Reference**: This repository ([`ZZZ-RecSys/ZZZ-MovieRecSystem`](https://github.com/ZZZ-RecSys/ZZZ-MovieRecSystem)) is permanently preserved as an open-source reference and architectural milestone archive.
+> - **Future Transition**: Subsequent active feature development and commercial product evolution have transitioned to a closed-source private repository.
+> - **Live Demo**: The hosted Vercel deployment remains fully active and operational at **[zzz-movie-rec-system.vercel.app](https://zzz-movie-rec-system.vercel.app/)**.
+>
+> **中文：**
+> - **开源保留参考**：本项目（[`ZZZ-RecSys/ZZZ-MovieRecSystem`](https://github.com/ZZZ-RecSys/ZZZ-MovieRecSystem)）将作为公开开源版本长期保留，供技术参考、教学与架构演进回顾。
+> - **后续开发转向闭源**：后续的深度迭代、产品化演进及商业化开发已转向闭源私有仓库进行维护。
+> - **Vercel 在线演示依然有效**：部署在 Vercel 上的在线体验 Demo **[zzz-movie-rec-system.vercel.app](https://zzz-movie-rec-system.vercel.app/)** 保持正常运行且持续有效。
+
 This project delivers an interactive movie recommendation experience powered by a lightweight latent semantic model and a modern
 Next.js front-end. A curated subset of Kaggle movie plots is embedded into a compact latent space (truncated SVD over TF-IDF
 features) and enriched with genre plus release-year metadata. The React carousel renders the top matches for a seed movie title or
