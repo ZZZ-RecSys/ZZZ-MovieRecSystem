@@ -9,36 +9,41 @@ a free-form description, presenting similarity scores and concise insight string
 
 ```mermaid
 flowchart LR
-    subgraph P0 ["Phase 0: Early Research (Feb 2024)"]
+    subgraph P1 ["Phase 1: Concept & Initial Research (Feb 2024)"]
         direction TB
         O1["Oracle Cloud & DB Stack"]
-        O2["❌ High coupling & heavy friction"]
+        O2["❌ Heavyweight, high coupling & deployment friction"]
         O1 --> O2
     end
 
-    subgraph P1 ["Phase 1: Hackathon MVP (Feb 2024)"]
+    subgraph P2 ["Phase 2: Hackathon Dual-Repo Architecture (Feb 2024)"]
         direction TB
-        TF["TensorFlow.js USE<br/>encoder.js"] --> PG[("PostgreSQL + pgvector<br/>(Aiven Hosted)")]
-        C1["Next.js Client<br/>pgvector L2 distance"] <--> PG
+        subgraph P2B ["Backend: ZZZ-MovieRecSystem"]
+            TF["TensorFlow.js (USE)<br/>encoder.js"] --> PG[("PostgreSQL + pgvector<br/>(Aiven Hosted)")]
+        end
+        subgraph P2F ["Frontend: ZZZ-MovieSearch-Client"]
+            FE["Next.js Search Client<br/>pgvector L2 Distance Query"]
+        end
+        FE <-->|"SQL &lt;-&gt; Distance"| PG
     end
 
-    subgraph P2 ["Phase 2: Current main (Oct 2025)"]
+    subgraph P3 ["Phase 3: Unified Standalone App (Oct 2025)"]
         direction TB
-        V1["Single Vercel Deployment<br/>(Next.js App)"]
+        V1["Consolidated Next.js App<br/>(Single Vercel Deployment)"]
         V2["In-Process ML Pipeline<br/>TF-IDF → Truncated SVD → Cosine Sim"]
         V1 --- V2
-        V3["✅ Zero Database & Zero Dependency"]
+        V3["✅ Zero External Database & Zero Dependency"]
     end
 
-    P0 -->|Pivot to open stack| P1
-    P1 -->|In-process rewrite| P2
+    P1 -->|Pivot to open vector stack| P2
+    P2 -->|Consolidate & eliminate DB| P3
 ```
 
-| Phase | Stack & Architecture | Tradeoffs & Outcome | Roles |
+| Phase | Architecture & Repos | Details & Outcome | Team |
 |---|---|---|---|
-| **Phase 0** (Feb 2024) | Oracle Cloud Ecosystem | Explored but dropped due to tight coupling & high deployment overhead | Yiwei Zhang (Lead), [Weiran Zhao](https://github.com/weiranzhao97) (Research) |
-| **Phase 1** (Feb 2024) | PostgreSQL + pgvector + TensorFlow USE | Working MVP for Global Hack Week; write-up on [DevPost](https://devpost.com/software/zzz-movie-recommender); companion client: [`ZZZ-MovieSearch-Client`](https://github.com/ZZZ-RecSys/ZZZ-MovieSearch-Client) | Yiwei Zhang (Engineering), [Weiran Zhao](https://github.com/weiranzhao97) (Docs & Research), [Shizhe Zhang](https://github.com/zhang-shizhe) (Ideation) |
-| **Phase 2** (Oct 2025) | Next.js + In-Process TF-IDF / SVD | Dropped hosted Postgres; entire ML pipeline runs in-process on Vercel with zero database | Yiwei Zhang (Solo rewrite & optimization) |
+| **Phase 1: Research** (Feb 2024) | Oracle Cloud Ecosystem | Explored Oracle full-stack DB architecture; dropped due to tight coupling and deployment complexity | Yiwei Zhang (Lead), [Weiran Zhao](https://github.com/weiranzhao97) (Research) |
+| **Phase 2: Dual-Repo MVP** (Feb 2024) | **Dual-Repo Pipeline**:<br/>• **Backend Ingestion**: [`ZZZ-MovieRecSystem`](https://github.com/ZZZ-RecSys/ZZZ-MovieRecSystem) (dataset ingestion, TF.js USE embedding, Postgres pgvector)<br/>• **Frontend Client**: [`ZZZ-MovieSearch-Client`](https://github.com/ZZZ-RecSys/ZZZ-MovieSearch-Client) (Next.js UI, real-time pgvector `<->` vector search) | Full vector search pipeline built for Global Hack Week: AI/ML; write-up on [DevPost](https://devpost.com/software/zzz-movie-recommender) | Yiwei Zhang (Engineering), [Weiran Zhao](https://github.com/weiranzhao97) (Docs & Research), [Shizhe Zhang](https://github.com/zhang-shizhe) (Ideation) |
+| **Phase 3: Unified Standalone** (Oct 2025) | Unified Next.js on Vercel ([`ZZZ-MovieRecSystem`](https://github.com/ZZZ-RecSys/ZZZ-MovieRecSystem) current `main`) | Consolidated frontend and backend into a single zero-database app; runs TF-IDF + Truncated SVD in-process on Vercel | Yiwei Zhang (Solo refactor & delivery) |
 
 ## Getting started
 
